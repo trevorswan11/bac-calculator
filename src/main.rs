@@ -127,7 +127,7 @@ fn number_of_standard_drinks() {
 
     // Calculate the number of standard drinks
     let number_of_standard_drinks = volume * abv * 0.789 / 14.;
-    println!("You've had {:.2} standard drinks.", number_of_standard_drinks);
+    println!("That's {:.2} standard drinks.", number_of_standard_drinks);
 }
 
 fn run_bac_calculator() {
@@ -183,6 +183,7 @@ fn main() {
         std::io::stdin().read_line(&mut input).expect("Failed to read line");
         let input = input.trim().parse::<i16>().unwrap();
 
+        // Execute the user's choice
         match input {
             1 => run_bac_calculator(),
             2 => number_of_standard_drinks(),
