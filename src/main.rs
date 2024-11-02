@@ -84,13 +84,13 @@ fn grams_of_alcohol(types_of_drinks: i64) -> f64 {
         
         // ABV of the drink
         let mut abv = String::new();
-        print!("ABV of one {} (In %): ", input.trim());
+        print!("ABV of one {} (Decimal): ", input.trim());
         std::io::stdout().flush().unwrap();
         std::io::stdin().read_line(&mut abv).expect("Failed to read line");
         let abv = abv.trim().parse::<f64>().unwrap();
 
         // Increment the total
-        total += number_of_drinks * size * (abv / 100.) * 0.789;
+        total += number_of_drinks * size * abv * 0.789;
         println!()
     }
     total
@@ -110,11 +110,27 @@ fn volume(input: &str) -> f64 {
     }
 }
 
-fn bac(weight: f64, alcohol_consumed: f64, ratio: f64, time_since_first_drink: f64) -> f64 {
-    (100. * alcohol_consumed) / (weight * ratio) - 0.015 * time_since_first_drink
+fn number_of_standard_drinks() {
+    // Collect the size of the drink
+    let mut input = String::new();
+    print!("Size of drink (Defaults to mL): ");
+    std::io::stdout().flush().unwrap();
+    std::io::stdin().read_line(&mut input).expect("Failed to read line");
+    let volume = volume(input.trim());
+
+    // Collect the ABV of the drink
+    let mut input = String::new();
+    print!("ABV of drink (Decimal): ");
+    std::io::stdout().flush().unwrap();
+    std::io::stdin().read_line(&mut input).expect("Failed to read line");
+    let abv = input.trim().parse::<f64>().unwrap();
+
+    // Calculate the number of standard drinks
+    let number_of_standard_drinks = volume * abv * 0.789 / 14.;
+    println!("You've had {:.2} standard drinks.", number_of_standard_drinks);
 }
 
-fn main() {
+fn run_bac_calculator() {
     // Collect the users gender
     let mut input = String::new();
     print!("Gender (M/F): ");
@@ -136,7 +152,6 @@ fn main() {
     std::io::stdin().read_line(&mut input).expect("Failed to read line");
     let time_since_first_drink = time_since_first_drink(input.trim());
 
-
     // Collect the user drinking amount
     let mut input = String::new();
     print!("Total types of drinks: ");
@@ -149,4 +164,31 @@ fn main() {
     // Calculate the BAC
     let bac = bac(weight_in_grams, alcohol_consumed, ratio, time_since_first_drink);
     println!("Your BAC is: {:.4}", bac);
+}
+
+fn bac(weight: f64, alcohol_consumed: f64, ratio: f64, time_since_first_drink: f64) -> f64 {
+    (100. * alcohol_consumed) / (weight * ratio) - 0.015 * time_since_first_drink
+}
+
+fn main() {
+    loop {
+        // Determine what  the user wants to do
+        let mut input = String::new();
+        println!("What would you like to do?");
+        println!("1. Calculate BAC");
+        println!("2. Calculate number of standard drinks");
+        println!("3. Quit");
+        print!("> ");
+        std::io::stdout().flush().unwrap();
+        std::io::stdin().read_line(&mut input).expect("Failed to read line");
+        let input = input.trim().parse::<i16>().unwrap();
+
+        match input {
+            1 => run_bac_calculator(),
+            2 => number_of_standard_drinks(),
+            3 => break,
+            _ => panic!("Invalid input!")
+        }
+        println!();
+    }
 }
