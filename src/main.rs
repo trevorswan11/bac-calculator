@@ -104,7 +104,7 @@ fn volume(input: &str) -> f64 {
 
     match unit.as_str() {
         "" | "ml" | "ML" | "mL" => value,
-        "l" | "L" => value / 1000.0,
+        "l" | "L" => value * 1000.0,
         "oz" | "OZ" | "oz." | "Oz." | "Oz" => value * 29.5735,
         _ => panic!("Unknown unit! Use 'ml' or 'l'.")
     }
