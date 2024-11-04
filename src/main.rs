@@ -54,7 +54,7 @@ fn time_since_first_drink(input: &str) -> f64 {
     let minutes = if parts.len() > 1 {
         parts[1].parse::<f64>().unwrap_or(0.0)
     } else {
-        0.0
+        5.0
     };
     hours + (minutes / 60.0)
 }
